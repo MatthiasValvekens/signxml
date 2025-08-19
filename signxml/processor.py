@@ -25,7 +25,10 @@ class XMLProcessor:
         if len(cls._schemas) == 0:
             for schema_file in cls.schema_files:
                 schema_path = os.path.join(cls._schema_dir, schema_file)
-                cls._schemas.append(etree.XMLSchema(etree.parse(schema_path)))
+                try:
+                    cls._schemas.append(etree.XMLSchema(etree.parse(schema_path)))
+                except Exception as e:
+                    raise RuntimeError(f"Failed to parse schema at {schema_path}: {e}") from e
         return cls._schemas
 
     @property
